@@ -1,28 +1,16 @@
 import { users } from "../data/users.js";
-
+import  {userService} from "../services/user.service.js"
 /* ================= CREATE USER ================= */
 export const creatUser = (req, res) => {
   try {
-    const { name, email } = req.body;
+    // const { name, email } = req.body;
+   
 
-    if (!name || !email) {
-      return res.status(400).json({
-        success: false,
-        message: "Name and email are required",
-      });
-    }
-
-    const newUser = {
-      id: Date.now().toString(),
-      name,
-      email,
-    };
-
-    users.push(newUser);
+    const newuser = userService(req.body)
 
     res.status(201).json({
       success: true,
-      data: newUser,
+      data: newuser,
     });
   } catch (error) {
     res.status(500).json({
@@ -83,6 +71,40 @@ export const deleteUser = (req, res) => {
       message: "User deleted successfully",
       data: deletedUser[0],
     });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+/* ================= GET USER BY ID ================= */
+export const getUserById = (req, res) => {
+  try {
+    const { id } = req.body;   // ✅ using body as per instruction
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const user = users.find((u) => u.id === id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+
   } catch (error) {
     res.status(500).json({
       success: false,
