@@ -1,21 +1,16 @@
 import express from "express";
-import { validateUserId } from "../middlewares/auth.js";
-import { validateCreateUsserDTO } from "../dtos/user.dto.js";
-import {
-  creatUser,
-  updateUser,
-  deleteUser,
-  getUserById
+import { 
+  createUser, 
+  getUserById, 
+  updateUser, 
+  deleteUser 
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
-router.post("/",validateCreateUsserDTO,creatUser);
-
-router.get("/", validateUserId, getUserById);   // ✅ GET using body
-
-router.patch("/", validateUserId, updateUser);
-
-router.delete("/", validateUserId, deleteUser);
+router.post("/", createUser);
+router.get("/:id", getUserById);
+router.patch("/:id", updateUser);
+router.delete("/:id", deleteUser);
 
 export default router;
